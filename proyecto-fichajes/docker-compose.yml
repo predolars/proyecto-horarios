@@ -1,0 +1,27 @@
+
+# Aquí definimos los servicios (contenedores) que queremos levantar
+services:
+  # Le damos un nombre a nuestro servicio de base de datos
+  postgres-db:
+    image: postgres:16-alpine  # La imagen oficial y ligera de PostgreSQL 16
+    container_name: fichajes-db # Nombre que le daremos al contenedor en ejecución
+    restart: always # Hace que el contenedor se reinicie solo si se cae
+
+    # Variables de entorno para configurar la base de datos
+    environment:
+      POSTGRES_USER: admin          # Elige tu nombre de usuario
+      POSTGRES_PASSWORD: admin1234   # Elige tu contraseña
+      POSTGRES_DB: fichajes_db # El nombre de la base de datos que se creará
+
+    # Mapeo de puertos: conecta el puerto de tu PC con el del contenedor
+    ports:
+      - "5432:5432" # Puerto_de_tu_PC:Puerto_del_Contenedor
+
+    # Volumen para persistir los datos
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Guarda los datos de la BBDD en un volumen gestionado por Docker
+
+# Definición del volumen
+volumes:
+  postgres_data:
+    name: fichajes-db-data # Nombre del volumen que guardará tus datos
