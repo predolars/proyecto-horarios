@@ -35,4 +35,7 @@ public class Asignacion {
     @JoinColumn(name = "rol_id")
     private Rol rolId;
 
+    @Column(name = "registro_activo")
+    private Boolean registroActivo = true;
+
 }

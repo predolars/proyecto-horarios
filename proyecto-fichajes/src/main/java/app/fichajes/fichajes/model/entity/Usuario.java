@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,7 +38,7 @@ public class Usuario {
     private Boolean registroActivo = true;
 
     // Relacion 1,N con tabla asignaciones
-    @OneToMany(mappedBy = "usuario_id")
+    @OneToMany(mappedBy = "usuarioId")
     private List<Asignacion> asignaciones = new ArrayList<>();
 
 }

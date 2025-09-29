@@ -37,4 +37,8 @@ public class Ausencia {
     @JoinColumn(name = "asignacion_id")
     private Asignacion asignacionId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gestionado_asignacion_id")
+    private Asignacion gestionadoAsignacionId;
+
 }

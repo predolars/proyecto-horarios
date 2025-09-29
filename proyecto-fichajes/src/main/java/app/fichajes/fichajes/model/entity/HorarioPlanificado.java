@@ -34,4 +34,7 @@ public class HorarioPlanificado {
     @JoinColumn(name = "asignacion_id")
     private Asignacion asignacionId;
 
+    @ManyToOne
+    @JoinColumn(name = "creado_asignacion_id")
+    private Asignacion asignacionIdCreateHorario;
 }

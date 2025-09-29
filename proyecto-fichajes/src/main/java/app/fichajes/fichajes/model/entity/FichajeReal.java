@@ -37,9 +37,16 @@ public class FichajeReal {
     @Column(name = "horas_computadas_final")
     private Integer horasComputadasFinal;
 
+    @Column(name = "registro_activo")
+    private Boolean registroActivo;
+
     // Relacion N,1 con tabla asignaciones
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asignacion_id")
     private Asignacion asignacionId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "aprovado_asignacion_id")
+    private Asignacion gestionadoAsignacionId;
 
 }
