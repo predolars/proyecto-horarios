@@ -1,15 +1,12 @@
 package app.fichajes.fichajes.model.entity;
 
 import app.fichajes.fichajes.model.enums.EstadoSuscripcion;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,8 +16,17 @@ import java.time.LocalDate;
 public class Empresa {
 
     @Id
-    @Column(unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String direccion;
+
+    private Double latitud;
+    private Double longitud;
+
+    @Column(name = "margen_permitido_metros")
+    private Integer margenPermitidoMetros;
 
     @Column(name = "nombre_empresa", nullable = false, length = 100)
     private String nombreEmpresa;
@@ -36,5 +42,9 @@ public class Empresa {
 
     @Column(name = "registro_activo")
     private Boolean registroActivo = true;
+
+    // Relacion 1,N con tabla asignaciones
+    @OneToMany(mappedBy = "empresa_id")
+    private List<Asignacion> asignaciones = new ArrayList<>();
 
 }

@@ -1,6 +1,7 @@
 package app.fichajes.fichajes.model.entity;
 
 import app.fichajes.fichajes.model.enums.EstadoConfirmacionFichaje;
+import app.fichajes.fichajes.model.enums.TipoFichaje;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,23 +18,17 @@ public class FichajeReal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "fecha_hora_entrada_real", nullable = false)
+    @Column(name = "fecha_hora_fichaje", nullable = false)
     private LocalDateTime fechaHoraEntradaReal;
 
-    @Column(name = "fecha_hora_salida_real")
-    private LocalDateTime fechaHoraSalidaReal;
+    @Column(name = "tipo_fichaje", nullable = false)
+    private TipoFichaje tipoFichaje;
 
     @Column(name = "latitud_fichaje")
     private Double latitudFichaje;
 
     @Column(name = "longitud_fichaje")
     private Double longitudFichaje;
-
-    @Column(name = "esta_en_zona")
-    private Boolean estaEnZona;
-
-    @Column(name = "justificacion_fuera_zona")
-    private String justificacionFueraZona;
 
     @Column(name = "estado_confimacion_fichaje")
     @Enumerated(EnumType.STRING)
@@ -42,12 +37,9 @@ public class FichajeReal {
     @Column(name = "horas_computadas_final")
     private Integer horasComputadasFinal;
 
+    // Relacion N,1 con tabla asignaciones
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_empresa", nullable = false)
-    private Empresa empresa;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_trabajador", nullable = false)
-    private Trabajador trabajador;
+    @JoinColumn(name = "asignacion_id")
+    private Asignacion asignacionId;
 
 }
