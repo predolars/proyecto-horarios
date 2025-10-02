@@ -10,17 +10,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "usuarios")
-public class Usuario {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String nombre;
+    private String name;
 
     @Column(nullable = false, length = 150)
-    private String apellidos;
+    private String surnames;
 
     @Column(unique = true, length = 20)
     private String dni;
@@ -29,16 +29,13 @@ public class Usuario {
     private String email;
 
     @Column(length = 9)
-    private String telefono;
+    private String phoneNumber;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "registro_activo")
-    private Boolean registroActivo = true;
-
     // Relacion 1,N con tabla asignaciones
-    @OneToMany(mappedBy = "usuarioId")
-    private List<Asignacion> asignaciones = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Assignment> assignments = new ArrayList<>();
 
 }
