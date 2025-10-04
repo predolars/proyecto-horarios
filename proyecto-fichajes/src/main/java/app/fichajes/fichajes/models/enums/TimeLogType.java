@@ -1,4 +1,4 @@
-package app.fichajes.fichajes.model.enums;
+package app.fichajes.fichajes.models.enums;
 
 public enum TimeLogType {
     START,

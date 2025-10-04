@@ -1,0 +1,20 @@
+meta {
+  name: getAll_users
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:8080/api/v1/users/get
+  body: none
+  auth: none
+}
+
+body:json {
+  {
+    "name": "pablo",
+    "surnames": "redolar sanchez",
+    "email": "pablo@gmail.com",
+    "password": "password1234"
+  }
+}

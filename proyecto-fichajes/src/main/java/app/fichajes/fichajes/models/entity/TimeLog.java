@@ -1,12 +1,13 @@
-package app.fichajes.fichajes.model.entity;
+package app.fichajes.fichajes.models.entity;
 
-import app.fichajes.fichajes.model.enums.TimeLogType;
+import app.fichajes.fichajes.models.enums.TimeLogType;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
