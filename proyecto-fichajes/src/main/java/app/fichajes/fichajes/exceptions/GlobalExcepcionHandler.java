@@ -11,11 +11,23 @@ import java.time.LocalDateTime;
 public class GlobalExcepcionHandler {
 
     @ExceptionHandler(FieldDataAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponseDTO> handleEmailAlreadyExistsException(FieldDataAlreadyExistsException ex) {
+    public ResponseEntity<ExceptionResponseDTO> handleFieldDataAlreadyExistsException(FieldDataAlreadyExistsException ex) {
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO();
 
         exceptionResponseDTO.setStatus(HttpStatus.CONFLICT.value());
         exceptionResponseDTO.setError("Campo duplicado en conflicto");
+        exceptionResponseDTO.setMessage(ex.getMessage());
+        exceptionResponseDTO.setTimestamp(LocalDateTime.now());
+
+        return ResponseEntity.status(exceptionResponseDTO.getStatus()).body(exceptionResponseDTO);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDTO>  handleResourceNotFoundException(ResourceNotFoundException ex) {
+        ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO();
+
+        exceptionResponseDTO.setStatus(HttpStatus.NOT_FOUND.value());
+        exceptionResponseDTO.setError("Recurso no econtrado");
         exceptionResponseDTO.setMessage(ex.getMessage());
         exceptionResponseDTO.setTimestamp(LocalDateTime.now());
 

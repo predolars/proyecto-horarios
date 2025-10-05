@@ -1,13 +1,15 @@
 package app.fichajes.fichajes.services;
 
+import app.fichajes.fichajes.exceptions.FieldDataAlreadyExistsException;
+import app.fichajes.fichajes.exceptions.ResourceNotFoundException;
+import app.fichajes.fichajes.models.dtos.UserRequestDTO;
 import app.fichajes.fichajes.models.dtos.UserResponseDTO;
 import app.fichajes.fichajes.models.entity.User;
 import app.fichajes.fichajes.repositories.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,40 +18,70 @@ public class UserService {
 
     final UserRepository userRepository;
     final PasswordEncoder passwordEncoder;
+    final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
     }
 
-    public UserResponseDTO createUser(User user) {
+    public UserResponseDTO createUser(UserRequestDTO userRequest) {
 
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "El email ya está en uso");
+        if (userRepository.existsByEmail(userRequest.getEmail())) {
+            throw new FieldDataAlreadyExistsException("El email ya existe en la base de datos");
         }
 
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        User user = modelMapper.map(userRequest, User.class);
+
+        String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
         user.setPassword(hashedPassword);
 
         User savedUser = userRepository.save(user);
-
-        return mapUserToResponseDTO(savedUser);
+        return modelMapper.map(savedUser, UserResponseDTO.class);
     }
 
     public List<UserResponseDTO> getAll() {
-        return userRepository.findAll().stream().map(this::mapUserToResponseDTO).toList();
+        return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponseDTO.class)).toList();
     }
 
-    private UserResponseDTO mapUserToResponseDTO(User user) {
-        UserResponseDTO userResponseDTO = new UserResponseDTO();
-        userResponseDTO.setId(user.getId());
-        userResponseDTO.setName(user.getName());
-        userResponseDTO.setSurnames(user.getSurnames());
-        userResponseDTO.setDni(user.getDni());
-        userResponseDTO.setEmail(user.getEmail());
-        userResponseDTO.setPhoneNumber(user.getPhoneNumber());
+    public UserResponseDTO findById(Long id) {
 
-        return userResponseDTO;
+        User userDb = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El usuario no se ha encontrado"));
+
+        return modelMapper.map(userDb, UserResponseDTO.class);
+
+    }
+
+    public UserResponseDTO updateUser(Long id, UserRequestDTO userRequest) {
+
+        User userDb = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe en la base de datos"));
+
+        // 2. Comprobación especial para el email si se quiere cambiar
+        if (userRequest.getEmail() != null && !userRequest.getEmail().equalsIgnoreCase(userDb.getEmail())) {
+            if (userRepository.existsByEmail(userRequest.getEmail())) {
+                throw new FieldDataAlreadyExistsException("El email ya existe en la base de datos");
+            }
+        }
+
+        // 3. ¡AQUÍ ESTÁ LA MAGIA! Mapeamos los campos no nulos del DTO a la entidad.
+        // Esto reemplaza todos tus 'if'.
+        modelMapper.map(userRequest, userDb);
+
+        // 4. Guardamos la entidad con los campos actualizados.
+        User updatedUser = userRepository.save(userDb);
+
+        // 5. Mapeamos la entidad final a un DTO de respuesta para no exponer la entidad.
+        return modelMapper.map(updatedUser, UserResponseDTO.class);
+
+    }
+
+    public void deleteById(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("El usuario con id " + id + " no existe en la base de datos");
+        }
+
+        userRepository.deleteById(id);
     }
 }

@@ -1,0 +1,7 @@
+package app.fichajes.fichajes.exceptions;
+
+public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+}

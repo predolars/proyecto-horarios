@@ -1,0 +1,18 @@
+meta {
+  name: updatePatch_by_id_users
+  type: http
+  seq: 6
+}
+
+patch {
+  url: http://localhost:8080/api/v1/users/update/40
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "dieloppo",
+    "email": "diego@gmai.com"
+  }
+}
