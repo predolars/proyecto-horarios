@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -16,4 +17,5 @@ public class ExceptionResponseDTO {
     private String error;
     private String message;
     private LocalDateTime timestamp;
+    private Map<String, String> fieldErrors;
 }

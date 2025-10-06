@@ -1,4 +1,4 @@
-package app.fichajes.fichajes.models.entity;
+package app.fichajes.fichajes.models.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class Assignment {
     private Long id;
 
     @Column(name = "assignment_date")
-    private LocalDate assignmentDate;
+    private LocalDate assignmentDate = LocalDate.now();
 
     // Relacion N,1 con tabla usuarios
     @ManyToOne(fetch = FetchType.LAZY)

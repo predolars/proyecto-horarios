@@ -1,4 +1,4 @@
-package app.fichajes.fichajes.models.dtos;
+package app.fichajes.fichajes.models.dtos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponseDTO {
+
     private Long id;
     private String name;
     private String surnames;

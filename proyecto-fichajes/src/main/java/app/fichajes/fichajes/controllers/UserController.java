@@ -1,7 +1,8 @@
 package app.fichajes.fichajes.controllers;
 
-import app.fichajes.fichajes.models.dtos.UserRequestDTO;
-import app.fichajes.fichajes.models.dtos.UserResponseDTO;
+import app.fichajes.fichajes.models.dtos.request.CreateUserRequestDTO;
+import app.fichajes.fichajes.models.dtos.request.UpdateUserRequestDTO;
+import app.fichajes.fichajes.models.dtos.response.UserResponseDTO;
 import app.fichajes.fichajes.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserRequestDTO userRequest) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequestDTO userRequest) {
 
         UserResponseDTO userResponse = userService.createUser(userRequest);
         return ResponseEntity.created(URI.create("http://localhost:8080/api/v1/users")).body(userResponse);
@@ -43,7 +44,7 @@ public class UserController {
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<?> updateByIp(@PathVariable Long id, @Valid @RequestBody UserRequestDTO userRequest) {
+    public ResponseEntity<?> updateByIp(@PathVariable Long id, @Valid @RequestBody UpdateUserRequestDTO userRequest) {
 
         UserResponseDTO userResponse = userService.updateUser(id, userRequest);
         return ResponseEntity.ok(userResponse);

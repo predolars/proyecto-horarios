@@ -1,7 +1,9 @@
-package app.fichajes.fichajes.models.entity;
+package app.fichajes.fichajes.models.entities;
 
 import app.fichajes.fichajes.models.enums.TimeLogType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,10 +20,12 @@ public class TimeLog {
     private Long id;
 
     @Column(name = "datetime_timelog", nullable = false)
+    @NotNull(message = "El campo no puede ser nulo o estar vacio")
     private LocalDateTime dateTimeTimelog;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "timelog_type", nullable = false)
+    @NotNull(message = "El campo no puede ser nulo o estar vacio")
     private TimeLogType timeLogType;
 
     @Column(name = "latitude_timelog")

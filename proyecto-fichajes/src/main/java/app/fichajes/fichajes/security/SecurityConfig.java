@@ -39,7 +39,8 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAutenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> {
-                    authorize.requestMatchers("/users/**").hasRole("");
+                    authorize.requestMatchers("/users/**").permitAll();
+                    authorize.requestMatchers("/companies/**").permitAll();
                     authorize.anyRequest().authenticated();
                 });//.httpBasic(Customizer.withDefaults());
 

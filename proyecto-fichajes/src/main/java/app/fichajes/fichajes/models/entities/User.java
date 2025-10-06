@@ -1,9 +1,9 @@
-package app.fichajes.fichajes.models.entity;
+package app.fichajes.fichajes.models.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,26 +28,25 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "El nombre no puede estar vacio")
+    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
     @Column(nullable = false)
     private String name;
 
-    @NotNull(message = "Los apellidos no pueden estar vacios")
+    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
     @Column(nullable = false)
     private String surnames;
 
     @Column(unique = true)
     private String dni;
 
-    @NotNull(message = "El email no puede estar vacio")
+    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
     @Email(message = "El email no es valido (estructura valida: ejemplo@gmail.com)")
     @Column(nullable = false, unique = true)
     private String email;
 
     private String phoneNumber;
 
-    @NotNull(message = "La password no puede estar vacia")
-//    @Size(min = 8, max = 20, message = "la password debe tener entre 8 y 20 caracteres")
+    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
     @Column(nullable = false)
     private String password;
 

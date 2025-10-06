@@ -1,6 +1,8 @@
-package app.fichajes.fichajes.models.entity;
+package app.fichajes.fichajes.models.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -17,16 +19,22 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cif", nullable = false, unique = true, length = 20)
+    @Column(name = "cif", nullable = false, unique = true)
+    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
     private String cif;
 
     @Column(nullable = false)
+    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
     private String address;
 
+    @NotNull(message = "El campo no puede ser nulo o estar vacio")
     private Double latitude;
+
+    @NotNull(message = "El campo no puede ser nulo o estar vacio")
     private Double longitude;
 
-    @Column(name = "company_name", nullable = false, length = 100)
+    @Column(name = "company_name", nullable = false, unique = true)
+    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
     private String companyName;
 
     // Relacion 1,N con tabla asignaciones

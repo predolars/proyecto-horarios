@@ -1,7 +1,7 @@
 package app.fichajes.fichajes.controllers;
 
-import app.fichajes.fichajes.models.dtos.JwtAuthResponse;
-import app.fichajes.fichajes.models.dtos.LoginDTO;
+import app.fichajes.fichajes.models.dtos.response.JwtAuthResponseDTO;
+import app.fichajes.fichajes.models.dtos.request.LoginRequestDTO;
 import app.fichajes.fichajes.security.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,12 +21,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
         System.out.println("Login");
-        String token = authService.login(loginDTO);
-        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
-        jwtAuthResponse.setAccessToken(token);
-        jwtAuthResponse.setTokenType("jwt");
-        return ResponseEntity.ok(jwtAuthResponse);
+        String token = authService.login(loginRequestDTO);
+        JwtAuthResponseDTO jwtAuthResponseDTO = new JwtAuthResponseDTO();
+        jwtAuthResponseDTO.setAccessToken(token);
+        jwtAuthResponseDTO.setTokenType("jwt");
+        return ResponseEntity.ok(jwtAuthResponseDTO);
     }
 }

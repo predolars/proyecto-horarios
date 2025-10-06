@@ -1,6 +1,6 @@
 package app.fichajes.fichajes.security;
 
-import app.fichajes.fichajes.models.dtos.LoginDTO;
+import app.fichajes.fichajes.models.dtos.request.LoginRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,12 +20,12 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
-    public String login(LoginDTO loginDTO) {
+    public String login(LoginRequestDTO loginRequestDTO) {
         System.out.println("AuthService Login");
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginDTO.getUsername(),
-                        loginDTO.getPassword()
+                        loginRequestDTO.getUsername(),
+                        loginRequestDTO.getPassword()
                 ));
         System.out.println(authentication.toString());
         System.out.println();

@@ -1,6 +1,8 @@
-package app.fichajes.fichajes.models.entity;
+package app.fichajes.fichajes.models.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,12 +19,15 @@ public class LeaveRequest {
     private Long id;
 
     @Column(name = "datetime_start", nullable = false)
+    @NotNull(message = "El campo no puede ser nulo o estar vacio")
     private LocalDateTime dateTimeStart;
 
     @Column(name = "datetime_end", nullable = false)
+    @NotNull(message = "El campo no puede ser nulo o estar vacio")
     private LocalDateTime dateTimeEnd;
 
     @Column(name = "justify_reason", nullable = false)
+    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
     private String justifyReason;
 
     // Relacion N,1 con tabla asignaciones
