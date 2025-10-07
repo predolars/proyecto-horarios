@@ -6,13 +6,15 @@ import app.fichajes.fichajes.models.dtos.response.CompanyResponseDTO;
 import app.fichajes.fichajes.services.CompanyService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
-@Controller
+@RestController
 @RequestMapping("/companies")
 public class CompanyController {
 
@@ -27,7 +29,7 @@ public class CompanyController {
     public ResponseEntity<?> createCompany(@Valid @RequestBody CreateCompanyRequestDTO companyRequest) {
 
         CompanyResponseDTO companyResponse = companyService.createCompany(companyRequest);
-        return ResponseEntity.created(URI.create("http://localhost:8080/api/v1/companies")).body(companyResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(companyResponse);
     }
 
     @GetMapping("/fetch")

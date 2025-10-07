@@ -1,10 +1,9 @@
 package app.fichajes.fichajes.repositories;
 
-import app.fichajes.fichajes.models.entities.Company;
+import app.fichajes.fichajes.models.entities.LeaveRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CompanyRepository extends JpaRepository<Company, Long> {
-
+public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long> {
 }

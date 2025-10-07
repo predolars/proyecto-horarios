@@ -38,7 +38,7 @@ public class Company {
     private String companyName;
 
     // Relacion 1,N con tabla asignaciones
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.LAZY)
     private List<Assignment> assignments = new ArrayList<>();
 
 }

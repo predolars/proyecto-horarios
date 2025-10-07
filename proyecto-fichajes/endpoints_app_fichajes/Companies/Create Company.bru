@@ -1,0 +1,21 @@
+meta {
+  name: Create Company
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/api/v1/companies/create
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "cif": "B12345678",
+    "address": "Calle Falsa 123",
+    "latitude": 40.416775,
+    "longitude": -3.703790,
+    "companyName": "Telepizza Centro"
+  }
+}

@@ -28,7 +28,7 @@ public class GlobalExcepcionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ExceptionResponseDTO>  handleResourceNotFoundException(ResourceNotFoundException ex) {
+    public ResponseEntity<ExceptionResponseDTO> handleResourceNotFoundException(ResourceNotFoundException ex) {
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO();
 
         exceptionResponseDTO.setStatus(HttpStatus.NOT_FOUND.value());
@@ -55,8 +55,8 @@ public class GlobalExcepcionHandler {
 
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO();
 
-        exceptionResponseDTO.setError("Error de validacion");
-        exceptionResponseDTO.setMessage(ex.getMessage() + "Campos no validos:\n" + ex.getFieldErrors());
+        exceptionResponseDTO.setError("Error de validación");
+        exceptionResponseDTO.setMessage("Uno o varios campos han entrado en conflicto con la validación de datos");
         exceptionResponseDTO.setStatus(HttpStatus.BAD_REQUEST.value());
         exceptionResponseDTO.setTimestamp(LocalDateTime.now());
         exceptionResponseDTO.setFieldErrors(errors);
@@ -68,7 +68,7 @@ public class GlobalExcepcionHandler {
     public ResponseEntity<ExceptionResponseDTO> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
 
         ExceptionResponseDTO response = new ExceptionResponseDTO(
-                HttpStatus.CONFLICT.value(), // 409 Conflict es el código perfecto para esto
+                HttpStatus.CONFLICT.value(),
                 "Conflicto de Datos",
                 "Los datos proporcionados entran en conflicto con registros existentes. Es posible que el DNI, CIF o email ya estén en uso.",
                 LocalDateTime.now(),

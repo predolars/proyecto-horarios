@@ -31,7 +31,7 @@ public class PlannedTimetable {
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "create_by_assignment_id")
     private Assignment createByAssignment;
 }

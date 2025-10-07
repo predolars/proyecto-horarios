@@ -6,13 +6,14 @@ import app.fichajes.fichajes.models.dtos.response.UserResponseDTO;
 import app.fichajes.fichajes.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 public class UserController {
 
@@ -27,7 +28,7 @@ public class UserController {
     public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequestDTO userRequest) {
 
         UserResponseDTO userResponse = userService.createUser(userRequest);
-        return ResponseEntity.created(URI.create("http://localhost:8080/api/v1/users")).body(userResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
     @GetMapping("/fetch")

@@ -39,9 +39,17 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAutenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> {
-                    authorize.requestMatchers("/users/**").permitAll();
-                    authorize.requestMatchers("/companies/**").permitAll();
-                    authorize.anyRequest().authenticated();
+                    authorize.requestMatchers("/**").permitAll();
+//                    authorize.requestMatchers("/api/v1/companies/**").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
+//                    authorize.requestMatchers("/api/v1/users/**").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
+//                    authorize.requestMatchers("/api/v1/timetables/**").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
+//                    authorize.requestMatchers("/api/v1/assignments/**").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
+//                    authorize.requestMatchers("/api/v1/timelogs/**").authenticated();
+//                    authorize.requestMatchers("/api/v1/roles/**").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
+//                    authorize.requestMatchers("/api/v1/leave-requests/fetch").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
+//                    authorize.requestMatchers("/api/v1/leave-requests/create").authenticated();
+
+//                    authorize.anyRequest().authenticated();
                 });//.httpBasic(Customizer.withDefaults());
 
         http.exceptionHandling(exception -> exception

@@ -51,7 +51,7 @@ public class User implements UserDetails {
     private String password;
 
     // Relacion 1,N con tabla assignments
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.LAZY)
     private List<Assignment> assignments = new ArrayList<>();
 
     @Override
