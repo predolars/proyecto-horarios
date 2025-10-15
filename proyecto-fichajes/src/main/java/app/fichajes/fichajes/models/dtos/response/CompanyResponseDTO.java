@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CompanyResponseDTO {
-
     private Long id;
     private String cif;
     private String address;

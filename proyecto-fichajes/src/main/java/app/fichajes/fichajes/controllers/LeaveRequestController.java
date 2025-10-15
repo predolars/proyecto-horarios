@@ -19,12 +19,12 @@ public class LeaveRequestController {
         this.leaveRequestService = leaveRequestService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createLeaveRequest(@Valid @RequestBody CreateLeaveRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(leaveRequestService.createLeaveRequest(dto));
     }
 
-    @GetMapping("/fetch")
+    @GetMapping
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(leaveRequestService.getAll());
     }

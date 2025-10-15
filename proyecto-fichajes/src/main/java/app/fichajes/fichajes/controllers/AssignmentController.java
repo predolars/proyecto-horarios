@@ -19,17 +19,17 @@ public class AssignmentController {
         this.assignmentService = assignmentService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createAssignment(@Valid @RequestBody CreateAssignmentRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(assignmentService.createAssignment(dto));
     }
 
-    @GetMapping("/fetch")
+    @GetMapping
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(assignmentService.getAll());
     }
 
-    @DeleteMapping("/fetch/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAssignment(@PathVariable Long id) {
         assignmentService.deleteAssignment(id);
         return ResponseEntity.noContent().build();

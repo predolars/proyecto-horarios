@@ -2,7 +2,6 @@ package app.fichajes.fichajes.models.entities;
 
 import app.fichajes.fichajes.models.enums.TimeLogType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -35,7 +34,7 @@ public class TimeLog {
     private Double longitudeTimelog;
 
     @Column(name = "summarized_hours")
-    private Integer summarizedHours;
+    private Double summarizedHours;
 
     // Relacion N,1 con tabla asignaciones
     @ManyToOne(fetch = FetchType.LAZY)

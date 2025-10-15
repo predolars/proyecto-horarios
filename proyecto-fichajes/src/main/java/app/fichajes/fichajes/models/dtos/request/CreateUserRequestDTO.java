@@ -1,5 +1,6 @@
 package app.fichajes.fichajes.models.dtos.request;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ public class CreateUserRequestDTO {
 
     private String dni;
 
-    @Email(message = "El formato no es el correcto (Ejemplo: example@gmail.com)")
+    @Email(message = "El formato no es el correcto (Ejemplo: direccion@gmail.com)")
     @NotBlank(message = "El campo no puede ser nulo o estar vacio")
     private String email;
 

@@ -1,7 +1,6 @@
 package app.fichajes.fichajes.models.dtos.request;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ public class UpdateUserRequestDTO {
     private String surnames;
     private String dni;
 
-    @Email(message = "El formato no es el correcto (Ejemplo: example@gmail.com)")
+    @Email(message = "El formato no es el correcto (Ejemplo: direccion@gmail.com)")
     private String email;
     private String phoneNumber;
 

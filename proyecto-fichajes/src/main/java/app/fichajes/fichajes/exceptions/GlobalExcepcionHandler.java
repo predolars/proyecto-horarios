@@ -3,6 +3,7 @@ package app.fichajes.fichajes.exceptions;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,7 @@ public class GlobalExcepcionHandler {
         exceptionResponseDTO.setStatus(HttpStatus.CONFLICT.value());
         exceptionResponseDTO.setError("Campo duplicado en conflicto");
         exceptionResponseDTO.setMessage(ex.getMessage());
+
         exceptionResponseDTO.setTimestamp(LocalDateTime.now());
 
         return ResponseEntity.status(exceptionResponseDTO.getStatus()).body(exceptionResponseDTO);
@@ -31,8 +33,8 @@ public class GlobalExcepcionHandler {
     public ResponseEntity<ExceptionResponseDTO> handleResourceNotFoundException(ResourceNotFoundException ex) {
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO();
 
-        exceptionResponseDTO.setStatus(HttpStatus.NOT_FOUND.value());
-        exceptionResponseDTO.setError("Recurso no econtrado");
+        exceptionResponseDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        exceptionResponseDTO.setError("Recurso no encontrado");
         exceptionResponseDTO.setMessage(ex.getMessage());
         exceptionResponseDTO.setTimestamp(LocalDateTime.now());
 
@@ -76,5 +78,19 @@ public class GlobalExcepcionHandler {
         );
 
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ExceptionResponseDTO> handleAuthenticationException(AuthenticationException ex) {
+
+        ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Unauthorized",
+                "Credenciales incorrectas, por favor inténtelo de nuevo.",
+                LocalDateTime.now(),
+                null
+        );
+
+        return ResponseEntity.status(exceptionResponseDTO.getStatus()).body(exceptionResponseDTO);
     }
 }

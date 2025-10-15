@@ -12,7 +12,7 @@
     <artifactId>fichajes</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>fichajes</name>
-    <description>Demo project for Spring Boot</description>
+    <description>App fichajes</description>
     <url/>
     <licenses>
         <license/>
@@ -97,7 +97,7 @@
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+            <artifactId>jjwt-jackson</artifactId>
             <version>0.13.0</version>
             <scope>runtime</scope>
         </dependency>

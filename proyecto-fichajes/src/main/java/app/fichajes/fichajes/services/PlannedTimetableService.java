@@ -11,8 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PlannedTimetableService {
@@ -29,16 +29,28 @@ public class PlannedTimetableService {
     }
 
     public PlannedTimetableResponseDTO createTimetable(CreateTimetableRequestDTO dto) {
+
+        // 1. Validación de coherencia de fechas
+        if (dto.getPlannedDateTimeStart().isAfter(dto.getPlannedDateTimeEnd()) || dto.getPlannedDateTimeStart().isEqual(dto.getPlannedDateTimeEnd())) {
+            throw new IllegalArgumentException("La fecha de inicio debe ser anterior a la fecha de fin.");
+        }
+
+        // Ya tienes la anotación @Future en el DTO, lo cual está genial para validar que es en el futuro.
+        // Mantenemos esta validación extra por si acaso.
+        if (dto.getPlannedDateTimeStart().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("No se pueden planificar horarios en fechas pasadas.");
+        }
+
         Assignment assignment = assignmentRepository.findById(dto.getAssignmentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Asignación no encontrada con id: " + dto.getAssignmentId()));
-        
+
         PlannedTimetable timetable = new PlannedTimetable();
         timetable.setAssignment(assignment);
         timetable.setPlannedDateTimeStart(dto.getPlannedDateTimeStart());
         timetable.setPlannedDateTimeEnd(dto.getPlannedDateTimeEnd());
 
         // Lógica para asignar quién lo crea (si se proporciona)
-        if(dto.getCreatedByAssignmentId() != null){
+        if (dto.getCreatedByAssignmentId() != null) {
             Assignment createdBy = assignmentRepository.findById(dto.getCreatedByAssignmentId())
                     .orElseThrow(() -> new ResourceNotFoundException("Asignación del creador no encontrada con id: " + dto.getCreatedByAssignmentId()));
             timetable.setCreateByAssignment(createdBy);
@@ -51,6 +63,6 @@ public class PlannedTimetableService {
     public List<PlannedTimetableResponseDTO> getAll() {
         return timetableRepository.findAll().stream()
                 .map(t -> modelMapper.map(t, PlannedTimetableResponseDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

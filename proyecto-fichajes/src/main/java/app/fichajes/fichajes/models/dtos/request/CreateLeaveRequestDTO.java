@@ -12,11 +12,11 @@ public class CreateLeaveRequestDTO {
     private Long assignmentId;
 
     @NotNull(message = "La fecha de inicio es obligatoria")
-    @Future
+    @Future(message = "La fecha de inicio debe ser posterior a la actual")
     private LocalDateTime dateTimeStart;
 
     @NotNull(message = "La fecha de fin es obligatoria")
-    @Future
+    @Future(message = "La fecha de inicio debe ser posterior a la actual")
     private LocalDateTime dateTimeEnd;
 
     @NotBlank(message = "El motivo de la ausencia es obligatorio")

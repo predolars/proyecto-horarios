@@ -22,7 +22,7 @@ public class Assignment {
     @Column(name = "assignment_date")
     private LocalDate assignmentDate = LocalDate.now();
 
-    // Relacion N,1 con tabla usuarios
+    // Relacion N,1 con tabla companies
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;

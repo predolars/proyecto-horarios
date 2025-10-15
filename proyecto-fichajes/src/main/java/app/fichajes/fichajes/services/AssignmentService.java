@@ -1,5 +1,6 @@
 package app.fichajes.fichajes.services;
 
+import app.fichajes.fichajes.exceptions.FieldDataAlreadyExistsException;
 import app.fichajes.fichajes.exceptions.ResourceNotFoundException;
 import app.fichajes.fichajes.models.dtos.request.CreateAssignmentRequestDTO;
 import app.fichajes.fichajes.models.dtos.response.AssignmentResponseDTO;
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AssignmentService {
@@ -38,7 +38,7 @@ public class AssignmentService {
         this.modelMapper = modelMapper;
     }
 
-    public AssignmentResponseDTO createAssignment(CreateAssignmentRequestDTO dto) {
+    public AssignmentResponseDTO createAssignment(CreateAssignmentRequestDTO dto) throws FieldDataAlreadyExistsException {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + dto.getUserId()));
         Company company = companyRepository.findById(dto.getCompanyId())
@@ -51,6 +51,10 @@ public class AssignmentService {
         assignment.setCompany(company);
         assignment.setRole(role);
 
+        if (assignmentRepository.existsByUserAndCompanyAndRole(user, company, role)) {
+            throw new FieldDataAlreadyExistsException("Este usuario ya esta asignado a la compañia: " + company.getCompanyName() + " con el rol de: " + role.getRoleName());
+        }
+
         Assignment savedAssignment = assignmentRepository.save(assignment);
         return modelMapper.map(savedAssignment, AssignmentResponseDTO.class);
     }
@@ -58,7 +62,7 @@ public class AssignmentService {
     public List<AssignmentResponseDTO> getAll() {
         return assignmentRepository.findAll().stream()
                 .map(assignment -> modelMapper.map(assignment, AssignmentResponseDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void deleteAssignment(Long id) {

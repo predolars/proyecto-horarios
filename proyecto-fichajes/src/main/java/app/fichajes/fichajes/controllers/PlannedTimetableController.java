@@ -19,12 +19,12 @@ public class PlannedTimetableController {
         this.timetableService = timetableService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createTimetable(@Valid @RequestBody CreateTimetableRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(timetableService.createTimetable(dto));
     }
 
-    @GetMapping("/fetch")
+    @GetMapping
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(timetableService.getAll());
     }

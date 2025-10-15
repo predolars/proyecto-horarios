@@ -44,7 +44,7 @@ public class LeaveRequestService {
 
     public List<LeaveRequestResponseDTO> getAll() {
         return leaveRequestRepository.findAll().stream()
-                .map(lr -> modelMapper.map(lr, LeaveRequestResponseDTO.class))
+                .map(leaveRequest -> modelMapper.map(leaveRequest, LeaveRequestResponseDTO.class))
                 .collect(Collectors.toList());
     }
 }

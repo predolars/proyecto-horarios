@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class UserService {
             throw new FieldDataAlreadyExistsException("El email ya existe en la base de datos");
         }
 
+        userRequest.setDni(userRequest.getDni().toUpperCase());
+        userRequest.setEmail(userRequest.getEmail().toLowerCase());
+
         User user = modelMapper.map(userRequest, User.class);
 
         String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
@@ -41,40 +45,43 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserResponseDTO.class);
+
     }
 
+    @Transactional(readOnly = true)
     public List<UserResponseDTO> getAll() {
         return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponseDTO.class)).toList();
+
     }
 
     public UserResponseDTO findById(Long id) {
-
         User userDb = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El usuario no se ha encontrado"));
 
         return modelMapper.map(userDb, UserResponseDTO.class);
 
     }
 
+    @Transactional
     public UserResponseDTO updateUser(Long id, UpdateUserRequestDTO userRequest) {
 
         User userDb = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe en la base de datos"));
 
         // Comprobación especial para el email si se quiere cambiar
-        if (userRequest.getEmail() != null && !userRequest.getEmail().equalsIgnoreCase(userDb.getEmail())) {
-            if (userRepository.existsByEmail(userRequest.getEmail())) {
-                throw new FieldDataAlreadyExistsException("El email ya existe en la base de datos");
-            }
+        if (userRequest.getEmail() != null && userRequest.getEmail().equalsIgnoreCase(userDb.getEmail())) {
+            throw new FieldDataAlreadyExistsException("El email ya existe en la base de datos");
         }
 
-        // Mapeamos los campos no nulos del DTO a la entidad.
-        // Esto reemplaza todos tus 'if'.
+//        userRequest.setEmail(userRequest.getEmail().toLowerCase());
+//
+//        if (userRequest.getDni() != null && !userRequest.getDni().equalsIgnoreCase(userDb.getDni())) {
+//            throw new FieldDataAlreadyExistsException("El email ya existe en la base de datos");
+//        }
+//
+//        userRequest.setDni(userRequest.getDni().toUpperCase());
+
         modelMapper.map(userRequest, userDb);
-
-        // Guardamos la entidad con los campos actualizados.
-        User updatedUser = userRepository.save(userDb);
-
-        // Mapeamos la entidad final a un DTO de respuesta para no exponer la entidad.
-        return modelMapper.map(updatedUser, UserResponseDTO.class);
+//        User updatedUser = userRepository.save(userDb);
+        return modelMapper.map(userDb, UserResponseDTO.class);
 
     }
 

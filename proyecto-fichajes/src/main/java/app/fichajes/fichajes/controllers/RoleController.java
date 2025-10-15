@@ -19,17 +19,17 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createRole(@Valid @RequestBody CreateRoleRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(roleService.createRole(dto));
     }
 
-    @GetMapping("/fetch")
+    @GetMapping
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(roleService.getAllRoles());
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         roleService.deleteRole(id);
         return ResponseEntity.noContent().build();
