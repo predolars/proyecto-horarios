@@ -1,7 +1,7 @@
 package app.fichajes.fichajes.controllers;
 
 import app.fichajes.fichajes.exceptions.ResourceNotFoundException;
-import app.fichajes.fichajes.models.dtos.request.CreateCompanyRequestDTO;
+import app.fichajes.fichajes.models.dtos.request.CompanyRequestDTO;
 import app.fichajes.fichajes.models.dtos.request.UpdateCompanyRequestDTO;
 import app.fichajes.fichajes.models.dtos.response.CompanyResponseDTO;
 import app.fichajes.fichajes.services.CompanyService;
@@ -23,45 +23,45 @@ public class CompanyController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCompany(@Valid @RequestBody CreateCompanyRequestDTO companyRequest) {
+    public ResponseEntity<Object> createCompany(@Valid @RequestBody CompanyRequestDTO companyRequest) {
 
         CompanyResponseDTO companyResponse = companyService.createCompany(companyRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(companyResponse);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<Object> getAll() {
 
         return ResponseEntity.ok(companyService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> fetchById(@PathVariable Long id) {
+    public ResponseEntity<Object> fetchById(@PathVariable Long id) {
 
         CompanyResponseDTO companyResponse = companyService.findById(id);
         return ResponseEntity.ok(companyResponse);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateByIp(@PathVariable Long id, @Valid @RequestBody UpdateCompanyRequestDTO companyRequest) {
+    public ResponseEntity<Object> updateByIp(@PathVariable Long id, @Valid @RequestBody UpdateCompanyRequestDTO companyRequest) {
 
         CompanyResponseDTO companyResponse = companyService.updateCompany(id, companyRequest);
         return ResponseEntity.ok(companyResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteById(@PathVariable Long id) {
 
         companyService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     /**
-     * Lógica de negocio avanzada
+     * Advanced business logic
      **/
 
     @GetMapping("/{id}/assignments")
-    public ResponseEntity<?> getAsignmentesByCompany(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<Object> getAsignmentesByCompany(@PathVariable Long id) throws ResourceNotFoundException {
 
         return ResponseEntity.status(HttpStatus.OK).body(companyService.getAssignmentsByCompany(id));
     }

@@ -25,31 +25,30 @@ public class AuthService {
         this.modelMapper = modelMapper;
     }
 
-
     /**
-     * Realiza el login, genera el token y devuelve el DTO de respuesta completo.
+     * Performs login, generates the token, and returns the complete response DTO.
      *
-     * @param loginRequestDTO DTO con las credenciales del usuario.
-     * @return Un DTO con el token de acceso y los datos del usuario logueado.
+     * @param loginRequestDTO DTO with the user's credentials.
+     * @return A DTO with the access token and the logged-in user's data.
      */
     public JwtAuthResponseDTO login(LoginRequestDTO loginRequestDTO) {
-        // 1. Autentica al usuario y obtiene el objeto Authentication
+        // 1. Authenticates the user and gets the Authentication object
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDTO.getUsername(),
                         loginRequestDTO.getPassword()
                 ));
 
-        // 2. Establece la autenticación en el contexto de seguridad de Spring
+        // 2. Sets the authentication in Spring's security context
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // 3. Genera el token JWT a partir del objeto Authentication
+        // 3. Generates the JWT token from the Authentication object
         String token = jwtUtil.generateToken(authentication);
 
-        // 4. Obtiene el principal (que es tu entidad User) y lo mapea a un DTO de respuesta
+        // 4. Gets the principal (which is your User entity) and maps it to a response DTO
         UserResponseDTO userResponseDTO = modelMapper.map(authentication.getPrincipal(), UserResponseDTO.class);
 
-        // 5. Construye y devuelve el objeto de respuesta completo
+        // 5. Builds and returns the complete response object
         JwtAuthResponseDTO response = new JwtAuthResponseDTO();
         response.setAccessToken(token);
         response.setTokenType("jwt");

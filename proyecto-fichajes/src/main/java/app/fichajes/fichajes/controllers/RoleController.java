@@ -1,6 +1,6 @@
 package app.fichajes.fichajes.controllers;
 
-import app.fichajes.fichajes.models.dtos.request.CreateRoleRequestDTO;
+import app.fichajes.fichajes.models.dtos.request.RoleRequestDTO;
 import app.fichajes.fichajes.services.RoleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,12 @@ public class RoleController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createRole(@Valid @RequestBody CreateRoleRequestDTO dto) {
+    public ResponseEntity<Object> createRole(@Valid @RequestBody RoleRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(roleService.createRole(dto));
     }
 
     @GetMapping
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<Object> getAll() {
         return ResponseEntity.ok(roleService.getAllRoles());
     }
 

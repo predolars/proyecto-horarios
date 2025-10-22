@@ -4,4 +4,5 @@ public class FieldDataAlreadyExistsException extends RuntimeException {
     public FieldDataAlreadyExistsException(String message) {
         super(message);
     }
+
 }

@@ -1,6 +1,6 @@
 package app.fichajes.fichajes.controllers;
 
-import app.fichajes.fichajes.models.dtos.request.CreateLeaveRequestDTO;
+import app.fichajes.fichajes.models.dtos.request.LeaveRequestDTO;
 import app.fichajes.fichajes.services.LeaveRequestService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,12 @@ public class LeaveRequestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createLeaveRequest(@Valid @RequestBody CreateLeaveRequestDTO dto) {
+    public ResponseEntity<Object> createLeaveRequest(@Valid @RequestBody LeaveRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(leaveRequestService.createLeaveRequest(dto));
     }
 
     @GetMapping
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<Object> getAll() {
         return ResponseEntity.ok(leaveRequestService.getAll());
     }
 }

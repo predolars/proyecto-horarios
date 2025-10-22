@@ -1,7 +1,7 @@
 package app.fichajes.fichajes.services;
 
 import app.fichajes.fichajes.exceptions.ResourceNotFoundException;
-import app.fichajes.fichajes.models.dtos.request.CreateLeaveRequestDTO;
+import app.fichajes.fichajes.models.dtos.request.LeaveRequestDTO;
 import app.fichajes.fichajes.models.dtos.response.LeaveRequestResponseDTO;
 import app.fichajes.fichajes.models.entities.Assignment;
 import app.fichajes.fichajes.models.entities.LeaveRequest;
@@ -10,9 +10,9 @@ import app.fichajes.fichajes.repositories.LeaveRequestRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LeaveRequestService {
@@ -28,9 +28,10 @@ public class LeaveRequestService {
         this.modelMapper = modelMapper;
     }
 
-    public LeaveRequestResponseDTO createLeaveRequest(CreateLeaveRequestDTO dto) {
+    @Transactional
+    public LeaveRequestResponseDTO createLeaveRequest(LeaveRequestDTO dto) {
         Assignment assignment = assignmentRepository.findById(dto.getAssignmentId())
-                .orElseThrow(() -> new ResourceNotFoundException("Asignación no encontrada con id: " + dto.getAssignmentId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Assignment not found with id: " + dto.getAssignmentId()));
 
         LeaveRequest leaveRequest = new LeaveRequest();
         leaveRequest.setAssignment(assignment);
@@ -42,9 +43,10 @@ public class LeaveRequestService {
         return modelMapper.map(savedRequest, LeaveRequestResponseDTO.class);
     }
 
+    @Transactional(readOnly = true)
     public List<LeaveRequestResponseDTO> getAll() {
         return leaveRequestRepository.findAll().stream()
                 .map(leaveRequest -> modelMapper.map(leaveRequest, LeaveRequestResponseDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity //para habilitar el soporte de seguridad basado en métodos. @PreAuthorize
+@EnableMethodSecurity //to enable method-based security support. @PreAuthorize
 public class SecurityConfig {
 
     final JwtAutenticationEntryPoint jwtAutenticationEntryPoint;
@@ -37,19 +37,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAutenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((authorize) -> {
-                    authorize.requestMatchers("/**").permitAll();
-//                    authorize.requestMatchers("/api/v1/companies/**").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
-//                    authorize.requestMatchers("/api/v1/users/**").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
-//                    authorize.requestMatchers("/api/v1/timetables/**").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
-//                    authorize.requestMatchers("/api/v1/assignments/**").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
-//                    authorize.requestMatchers("/api/v1/timelogs/**").authenticated();
-//                    authorize.requestMatchers("/api/v1/roles/**").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
-//                    authorize.requestMatchers("/api/v1/leave-requests/fetch").hasAnyRole("ROLE_JEFE", "ROLE_ENCARGADO");
-//                    authorize.requestMatchers("/api/v1/leave-requests/create").authenticated();
-
-//                    authorize.anyRequest().authenticated();
-                });//.httpBasic(Customizer.withDefaults());
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").permitAll());
 
         http.exceptionHandling(exception -> exception
                 .authenticationEntryPoint(jwtAutenticationEntryPoint));

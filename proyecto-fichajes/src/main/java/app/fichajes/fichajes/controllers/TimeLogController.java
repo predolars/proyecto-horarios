@@ -28,6 +28,18 @@ public class TimeLogController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PostMapping("/pause")
+    public ResponseEntity<TimeLogResponseDTO> pause(@Valid @RequestBody TimeLogRequestDTO dto) {
+        TimeLogResponseDTO response = timeLogService.performPause(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/resume")
+    public ResponseEntity<TimeLogResponseDTO> resume(@Valid @RequestBody TimeLogRequestDTO dto) {
+        TimeLogResponseDTO response = timeLogService.performResume(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
     @PostMapping("/clock-out")
     public ResponseEntity<TimeLogResponseDTO> clockOut(@Valid @RequestBody TimeLogRequestDTO dto) {
         TimeLogResponseDTO response = timeLogService.performClockOut(dto);

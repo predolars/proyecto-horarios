@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface TimeLogRepository extends JpaRepository<TimeLog, Long> {
     Optional<TimeLog> findTopByAssignmentOrderByDateTimeTimelogDesc(Assignment assignment);
+
 }

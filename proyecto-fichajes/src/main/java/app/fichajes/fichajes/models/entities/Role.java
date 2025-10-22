@@ -16,7 +16,7 @@ public class Role {
     private Long id;
 
     @Column(name = "role_name", nullable = false, unique = true)
-    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
+    @NotBlank(message = "The field cannot be null or empty")
     private String roleName;
 
 }

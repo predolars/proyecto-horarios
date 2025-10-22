@@ -1,0 +1,43 @@
+meta {
+  name: Create batch timetables
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/api/v1/timetables
+  body: json
+  auth: inherit
+}
+
+body:json {
+  // [
+  //   {
+  //     "assignmentId": 1,
+  //     "plannedDateTimeStart": "2026-11-10T13:00:00",
+  //     "plannedDateTimeEnd": "2026-11-10T16:00:00",
+  //     "createdByAssignmentId": 2
+  //   },
+  //   {
+  //     "assignmentId": 1,
+  //     "plannedDateTimeStart": "2026-11-10T19:00:00",
+  //     "plannedDateTimeEnd": "2026-11-10T23:59:00",
+  //     "createdByAssignmentId": 2
+  //   }
+  // ]
+  
+  // [
+  //   {
+  //     "assignmentId": 1,
+  //     "plannedDateTimeStart": "2026-11-11T09:00:00",
+  //     "plannedDateTimeEnd": "2026-11-11T17:00:00",
+  //     "createdByAssignmentId": 2
+  //   },
+  //   {
+  //     "assignmentId": 2,
+  //     "plannedDateTimeStart": "2026-11-11T10:00:00",
+  //     "plannedDateTimeEnd": "2026-11-11T18:00:00",
+  //     "createdByAssignmentId": 2
+  //   }
+  // ]
+}

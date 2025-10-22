@@ -19,18 +19,18 @@ public class LeaveRequest {
     private Long id;
 
     @Column(name = "datetime_start", nullable = false)
-    @NotNull(message = "El campo no puede ser nulo o estar vacio")
+    @NotNull(message = "The field cannot be null or empty")
     private LocalDateTime dateTimeStart;
 
     @Column(name = "datetime_end", nullable = false)
-    @NotNull(message = "El campo no puede ser nulo o estar vacio")
+    @NotNull(message = "The field cannot be null or empty")
     private LocalDateTime dateTimeEnd;
 
     @Column(name = "justify_reason", nullable = false)
-    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
+    @NotBlank(message = "The field cannot be null or empty")
     private String justifyReason;
 
-    // Relacion N,1 con tabla asignaciones
+    // N,1 relationship with assignments table
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;

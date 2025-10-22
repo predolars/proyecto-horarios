@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class GlobalExcepcionHandler {
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO();
 
         exceptionResponseDTO.setStatus(HttpStatus.CONFLICT.value());
-        exceptionResponseDTO.setError("Campo duplicado en conflicto");
+        exceptionResponseDTO.setError("Field data conflict");
         exceptionResponseDTO.setMessage(ex.getMessage());
 
         exceptionResponseDTO.setTimestamp(LocalDateTime.now());
@@ -33,8 +34,8 @@ public class GlobalExcepcionHandler {
     public ResponseEntity<ExceptionResponseDTO> handleResourceNotFoundException(ResourceNotFoundException ex) {
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO();
 
-        exceptionResponseDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        exceptionResponseDTO.setError("Recurso no encontrado");
+        exceptionResponseDTO.setStatus(HttpStatus.BAD_REQUEST.value());
+        exceptionResponseDTO.setError("Resource not found");
         exceptionResponseDTO.setMessage(ex.getMessage());
         exceptionResponseDTO.setTimestamp(LocalDateTime.now());
 
@@ -42,8 +43,8 @@ public class GlobalExcepcionHandler {
     }
 
     /**
-     * Este método se activa cuando falla una validación en un DTO anotado con @Valid.
-     * Recoge todos los mensajes de error de los campos y los devuelve en un JSON claro.
+     * This method is activated when a validation on a DTO annotated with @Valid fails.
+     * It collects all field error messages and returns them in a clear JSON.
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
@@ -55,10 +56,31 @@ public class GlobalExcepcionHandler {
             errors.put(fieldName, errorMessage);
         });
 
+        return getObjectResponseEntity(errors);
+    }
+
+    /**
+     * In case the method above does not capture the exception correctly, this one will be activated when a validation on a DTO annotated with @Valid fails.
+     * It collects all field error messages and returns them in a clear JSON.
+     */
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<Object> handlerMethodValidationException(HandlerMethodValidationException ex) {
+
+        Map<String, String> errors = new HashMap<>();
+        ex.getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+
+        return getObjectResponseEntity(errors);
+    }
+
+    private ResponseEntity<Object> getObjectResponseEntity(Map<String, String> errors) {
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO();
 
-        exceptionResponseDTO.setError("Error de validación");
-        exceptionResponseDTO.setMessage("Uno o varios campos han entrado en conflicto con la validación de datos");
+        exceptionResponseDTO.setError("Validation error");
+        exceptionResponseDTO.setMessage("One or more fields have conflicted with data validation");
         exceptionResponseDTO.setStatus(HttpStatus.BAD_REQUEST.value());
         exceptionResponseDTO.setTimestamp(LocalDateTime.now());
         exceptionResponseDTO.setFieldErrors(errors);
@@ -71,8 +93,9 @@ public class GlobalExcepcionHandler {
 
         ExceptionResponseDTO response = new ExceptionResponseDTO(
                 HttpStatus.CONFLICT.value(),
-                "Conflicto de Datos",
-                "Los datos proporcionados entran en conflicto con registros existentes. Es posible que el DNI, CIF o email ya estén en uso.",
+                "Data Conflict",
+                ex.getMessage(),
+//                "The data provided conflicts with existing records. It is possible that the DNI, CIF or email are already in use.",
                 LocalDateTime.now(),
                 null
         );
@@ -86,7 +109,22 @@ public class GlobalExcepcionHandler {
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO(
                 HttpStatus.UNAUTHORIZED.value(),
                 "Unauthorized",
-                "Credenciales incorrectas, por favor inténtelo de nuevo.",
+                ex.getCause().getMessage(),
+//                "Incorrect credentials, please try again.",
+                LocalDateTime.now(),
+                null
+        );
+
+        return ResponseEntity.status(exceptionResponseDTO.getStatus()).body(exceptionResponseDTO);
+    }
+
+    @ExceptionHandler(GenericException.class)
+    public ResponseEntity<ExceptionResponseDTO> handleGenericException(GenericException e) {
+
+        ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                "EXCEPTION",
+                e.getMessage(),
                 LocalDateTime.now(),
                 null
         );

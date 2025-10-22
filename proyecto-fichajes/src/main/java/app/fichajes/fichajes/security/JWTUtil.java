@@ -18,9 +18,8 @@ import java.util.function.Function;
 @Component
 public class JWTUtil {
 
-    private final long jwtExpiration = 86400000;
     @Value("${jwt.secret}")
-    private String secret;// "your-256-bit-secret-your-256-bit-secret";
+    private String secret;
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = secret.getBytes();
@@ -59,8 +58,7 @@ public class JWTUtil {
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        //claims.put("apellido", "apellido");
-        //claims.put("rol", "rol");
+        claims.put("role", "role");
         return createToken(claims, username);
     }
 
@@ -68,19 +66,19 @@ public class JWTUtil {
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
         Date currentDate = new Date();
+        long jwtExpiration = 86400000;
         Date expireDate = new Date(currentDate.getTime() + jwtExpiration);
         List<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
-        String token = Jwts.builder()
+
+        return Jwts.builder()
                 .subject(username)
                 .claim("roles", roles)
                 .issuedAt(new Date())
                 .expiration(expireDate)
                 .signWith(getSigningKey())
                 .compact();
-
-        return token;
     }
 
 
@@ -89,10 +87,9 @@ public class JWTUtil {
                 .claims(claims)
                 .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas de expiración
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours expiration
                 .signWith(getSigningKey())
                 .compact();
     }
-
 
 }

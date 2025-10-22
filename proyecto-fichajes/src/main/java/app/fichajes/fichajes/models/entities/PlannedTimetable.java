@@ -18,14 +18,14 @@ public class PlannedTimetable {
     private Long id;
 
     @Column(name = "planned_datetime_start", nullable = false)
-    @NotNull(message = "El campo no puede ser nulo o estar vacio")
+    @NotNull(message = "The field cannot be null or empty")
     private LocalDateTime plannedDateTimeStart;
 
     @Column(name = "planned_datetime_end", nullable = false)
-    @NotNull(message = "El campo no puede ser nulo o estar vacio")
+    @NotNull(message = "The field cannot be null or empty")
     private LocalDateTime plannedDateTimeEnd;
 
-    // Relacion N,1 con tabla asignaciones
+    // N,1 relationship with assignments table
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;

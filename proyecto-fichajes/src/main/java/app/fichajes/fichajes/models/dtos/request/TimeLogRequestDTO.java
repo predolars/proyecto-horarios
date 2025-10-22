@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class TimeLogRequestDTO {
-    @NotNull(message = "El ID de la asignación es obligatorio")
+    @NotNull(message = "The assignment ID is mandatory")
     private Long assignmentId;
     
     private Double latitude;

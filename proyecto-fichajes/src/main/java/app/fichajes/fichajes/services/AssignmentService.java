@@ -2,7 +2,7 @@ package app.fichajes.fichajes.services;
 
 import app.fichajes.fichajes.exceptions.FieldDataAlreadyExistsException;
 import app.fichajes.fichajes.exceptions.ResourceNotFoundException;
-import app.fichajes.fichajes.models.dtos.request.CreateAssignmentRequestDTO;
+import app.fichajes.fichajes.models.dtos.request.AssignmentRequestDTO;
 import app.fichajes.fichajes.models.dtos.response.AssignmentResponseDTO;
 import app.fichajes.fichajes.models.entities.Assignment;
 import app.fichajes.fichajes.models.entities.Company;
@@ -15,6 +15,7 @@ import app.fichajes.fichajes.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,13 +39,14 @@ public class AssignmentService {
         this.modelMapper = modelMapper;
     }
 
-    public AssignmentResponseDTO createAssignment(CreateAssignmentRequestDTO dto) throws FieldDataAlreadyExistsException {
+    @Transactional
+    public AssignmentResponseDTO createAssignment(AssignmentRequestDTO dto) throws FieldDataAlreadyExistsException {
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + dto.getUserId()));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + dto.getUserId()));
         Company company = companyRepository.findById(dto.getCompanyId())
-                .orElseThrow(() -> new ResourceNotFoundException("Empresa no encontrada con id: " + dto.getCompanyId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found with id: " + dto.getCompanyId()));
         Role role = roleRepository.findById(dto.getRoleId())
-                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con id: " + dto.getRoleId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found with id: " + dto.getRoleId()));
 
         Assignment assignment = new Assignment();
         assignment.setUser(user);
@@ -52,22 +54,24 @@ public class AssignmentService {
         assignment.setRole(role);
 
         if (assignmentRepository.existsByUserAndCompanyAndRole(user, company, role)) {
-            throw new FieldDataAlreadyExistsException("Este usuario ya esta asignado a la compañia: " + company.getCompanyName() + " con el rol de: " + role.getRoleName());
+            throw new FieldDataAlreadyExistsException("This user is already assigned to the company: " + company.getCompanyName() + " with the role of: " + role.getRoleName());
         }
 
         Assignment savedAssignment = assignmentRepository.save(assignment);
         return modelMapper.map(savedAssignment, AssignmentResponseDTO.class);
     }
 
+    @Transactional(readOnly = true)
     public List<AssignmentResponseDTO> getAll() {
         return assignmentRepository.findAll().stream()
                 .map(assignment -> modelMapper.map(assignment, AssignmentResponseDTO.class))
                 .toList();
     }
 
+    @Transactional
     public void deleteAssignment(Long id) {
         if (!assignmentRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Asignación no encontrada con id: " + id);
+            throw new ResourceNotFoundException("Assignment not found with id: " + id);
         }
         assignmentRepository.deleteById(id);
     }

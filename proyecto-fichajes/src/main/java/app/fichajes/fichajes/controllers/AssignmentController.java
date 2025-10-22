@@ -1,6 +1,6 @@
 package app.fichajes.fichajes.controllers;
 
-import app.fichajes.fichajes.models.dtos.request.CreateAssignmentRequestDTO;
+import app.fichajes.fichajes.models.dtos.request.AssignmentRequestDTO;
 import app.fichajes.fichajes.services.AssignmentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,12 @@ public class AssignmentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createAssignment(@Valid @RequestBody CreateAssignmentRequestDTO dto) {
+    public ResponseEntity<Object> createAssignment(@Valid @RequestBody AssignmentRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(assignmentService.createAssignment(dto));
     }
 
     @GetMapping
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<Object> getAll() {
         return ResponseEntity.ok(assignmentService.getAll());
     }
 

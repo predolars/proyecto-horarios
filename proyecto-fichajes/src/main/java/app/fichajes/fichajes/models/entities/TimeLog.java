@@ -19,12 +19,12 @@ public class TimeLog {
     private Long id;
 
     @Column(name = "datetime_timelog", nullable = false)
-    @NotNull(message = "El campo no puede ser nulo o estar vacio")
+    @NotNull(message = "The field cannot be null or empty")
     private LocalDateTime dateTimeTimelog;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "timelog_type", nullable = false)
-    @NotNull(message = "El campo no puede ser nulo o estar vacio")
+    @NotNull(message = "The field cannot be null or empty")
     private TimeLogType timeLogType;
 
     @Column(name = "latitude_timelog")
@@ -36,13 +36,13 @@ public class TimeLog {
     @Column(name = "summarized_hours")
     private Double summarizedHours;
 
-    // Relacion N,1 con tabla asignaciones
+    // N,1 relationship with assignments table
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "aproved_by_assignment_id")
-    private Assignment aprovedByAssignment;
+    @JoinColumn(name = "approved_by_assignment_id")
+    private Assignment approvedByAssignment;
 
 }

@@ -2,7 +2,7 @@ package app.fichajes.fichajes.services;
 
 import app.fichajes.fichajes.exceptions.FieldDataAlreadyExistsException;
 import app.fichajes.fichajes.exceptions.ResourceNotFoundException;
-import app.fichajes.fichajes.models.dtos.request.CreateCompanyRequestDTO;
+import app.fichajes.fichajes.models.dtos.request.CompanyRequestDTO;
 import app.fichajes.fichajes.models.dtos.request.UpdateCompanyRequestDTO;
 import app.fichajes.fichajes.models.dtos.response.AssignmentResponseDTO;
 import app.fichajes.fichajes.models.dtos.response.CompanyResponseDTO;
@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,12 +30,13 @@ public class CompanyService {
         this.modelMapper = modelMapper;
     }
 
-    public CompanyResponseDTO createCompany(CreateCompanyRequestDTO companyRequestDTO) {
+    @Transactional
+    public CompanyResponseDTO createCompany(CompanyRequestDTO companyRequestDTO) {
         if (companyRepository.existsByCompanyName(companyRequestDTO.getCompanyName())) {
-            throw new FieldDataAlreadyExistsException("El nombre de la empresa ya existe en la base de datos: " + companyRequestDTO.getCompanyName());
+            throw new FieldDataAlreadyExistsException("The company name already exists in the database: " + companyRequestDTO.getCompanyName());
         }
         if (companyRepository.existsByCif(companyRequestDTO.getCif())) {
-            throw new FieldDataAlreadyExistsException("El CIF ya existe en la base de datos: " + companyRequestDTO.getCif());
+            throw new FieldDataAlreadyExistsException("The CIF already exists in the database: " + companyRequestDTO.getCif());
         }
 
         companyRequestDTO.setCif(companyRequestDTO.getCif().toUpperCase());
@@ -45,6 +47,7 @@ public class CompanyService {
         return modelMapper.map(companySaved, CompanyResponseDTO.class);
     }
 
+    @Transactional(readOnly = true)
     public List<CompanyResponseDTO> getAll() {
 
         return companyRepository.findAll().stream().map(company -> modelMapper.map(company, CompanyResponseDTO.class)).toList();
@@ -53,19 +56,20 @@ public class CompanyService {
     public CompanyResponseDTO findById(Long id) {
 
         Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("La empresa con id: " + id + " no existe"));
+                .orElseThrow(() -> new ResourceNotFoundException("Company with id: " + id + " does not exist"));
         return modelMapper.map(company, CompanyResponseDTO.class);
     }
 
+    @Transactional
     public CompanyResponseDTO updateCompany(Long id, UpdateCompanyRequestDTO companyRequest) {
 
         Company companyDb = companyRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("La empresa con id: " + id + " no existe"));
+                .orElseThrow(() -> new ResourceNotFoundException("Company with id: " + id + " does not exist"));
 
-        // Con una sola consulta, validamos si los nuevos datos entrarían en conflicto con OTRA empresa
+        // With a single query, we validate if the new data would conflict with ANOTHER company
         if (companyRequest.getCompanyName() != null || companyRequest.getCif() != null) {
 
-            // Normalizamos el CIF si no es nulo ANTES de la validación
+            // We normalize the CIF if it is not null BEFORE validation
             if (companyRequest.getCif() != null) {
                 companyRequest.setCif(companyRequest.getCif().toUpperCase());
             }
@@ -75,12 +79,12 @@ public class CompanyService {
                     companyRequest.getCif(),
                     id
             ).ifPresent(existingCompany -> {
-                // Si encontramos una empresa, lanzamos la excepción
+                // If we find a company, we throw the exception
                 if (existingCompany.getCompanyName().equalsIgnoreCase(companyRequest.getCompanyName())) {
-                    throw new FieldDataAlreadyExistsException("Ya existe otra empresa con el nombre: " + companyRequest.getCompanyName());
+                    throw new FieldDataAlreadyExistsException("Another company with the name already exists: " + companyRequest.getCompanyName());
                 }
                 if (existingCompany.getCif().equalsIgnoreCase(companyRequest.getCif())) {
-                    throw new FieldDataAlreadyExistsException("Ya existe otra empresa con el CIF: " + companyRequest.getCif());
+                    throw new FieldDataAlreadyExistsException("Another company with the CIF already exists: " + companyRequest.getCif());
                 }
             });
 
@@ -91,18 +95,19 @@ public class CompanyService {
         return modelMapper.map(updatedCompany, CompanyResponseDTO.class);
     }
 
+    @Transactional
     public void deleteById(Long id) {
 
         if (!companyRepository.existsById(id)) {
-            throw new ResourceNotFoundException("La empresa con id: " + id + " no existe en la base de datos");
+            throw new ResourceNotFoundException("Company with id: " + id + " does not exist in the database");
         }
         companyRepository.deleteById(id);
     }
 
-    /** Metodo para devolver la lista de asignaciones que tiene una compañia **/
+    /** Method to return the list of assignments a company has **/
     public List<AssignmentResponseDTO> getAssignmentsByCompany(Long id) {
 
-        Company company = companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("La empresa con id%s no existe", id)));
+        Company company = companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Company with id %s does not exist", id)));
 
         return company.getAssignments().stream().map(assignment -> modelMapper.map(assignment, AssignmentResponseDTO.class)).toList();
     }

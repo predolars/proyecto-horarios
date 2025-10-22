@@ -20,24 +20,24 @@ public class Company {
     private Long id;
 
     @Column(name = "cif", nullable = false, unique = true)
-    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
+    @NotBlank(message = "The field cannot be null or empty")
     private String cif;
 
     @Column(nullable = false)
-    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
+    @NotBlank(message = "The field cannot be null or empty")
     private String address;
 
-    @NotNull(message = "El campo no puede ser nulo o estar vacio")
+    @NotNull(message = "The field cannot be null or empty")
     private Double latitude;
 
-    @NotNull(message = "El campo no puede ser nulo o estar vacio")
+    @NotNull(message = "The field cannot be null or empty")
     private Double longitude;
 
     @Column(name = "company_name", nullable = false, unique = true)
-    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
+    @NotBlank(message = "The field cannot be null or empty")
     private String companyName;
 
-    // Relacion 1,N con tabla asignaciones
+    // 1,N relationship with assignments table
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.LAZY)
     private List<Assignment> assignments = new ArrayList<>();
 

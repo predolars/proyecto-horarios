@@ -12,9 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LoginRequestDTO {
 
-    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
+    @NotBlank(message = "The field cannot be null or empty")
     String username;
 
-    @NotBlank(message = "El campo no puede ser nulo o estar vacio")
+    @NotBlank(message = "The field cannot be null or empty")
     String password;
 }
