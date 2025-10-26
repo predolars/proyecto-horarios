@@ -91,8 +91,7 @@ public class CompanyService {
         }
 
         modelMapper.map(companyRequest, companyDb);
-        Company updatedCompany = companyRepository.save(companyDb);
-        return modelMapper.map(updatedCompany, CompanyResponseDTO.class);
+        return modelMapper.map(companyDb, CompanyResponseDTO.class);
     }
 
     @Transactional

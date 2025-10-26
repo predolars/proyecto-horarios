@@ -35,6 +35,7 @@ public class PlannedTimetableService {
         this.modelMapper = modelMapper;
     }
 
+    // TODO DOCUMENTAR METODOS
     @Transactional
     public List<PlannedTimetableResponseDTO> createTimetables(List<TimetableRequestDTO> timetablesDTOs) {
 

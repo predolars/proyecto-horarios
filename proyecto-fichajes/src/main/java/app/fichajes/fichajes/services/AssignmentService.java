@@ -14,6 +14,8 @@ import app.fichajes.fichajes.repositories.RoleRepository;
 import app.fichajes.fichajes.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,5 +76,19 @@ public class AssignmentService {
             throw new ResourceNotFoundException("Assignment not found with id: " + id);
         }
         assignmentRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Object getMyAssignments() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+
+        User currentUser = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("Assignment not found from token"));
+        List<Assignment> assignments = assignmentRepository.findByUser(currentUser);
+
+        return assignments.stream()
+                .map(assignment -> modelMapper.map(assignment, AssignmentResponseDTO.class))
+                .toList();
     }
 }

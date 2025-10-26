@@ -110,9 +110,8 @@ public class TimeLogService {
         TimeLog lastEntry = findLastTimeLog(assignment)
                 .orElseThrow(() -> new GenericException("Cannot clock out without having clocked in first."));
 
-        // Validación correcta
+        // TODO VALIDAR MAS DE DOS HORAS
         if (lastEntry.getTimeLogType() != TimeLogType.START && lastEntry.getTimeLogType() != TimeLogType.RESUME) {
-            // He cambiado tu mensaje ligeramente para ser más preciso
             throw new GenericException("The last time log was not a START or RESUME. Cannot clock out if paused or already finished.");
         }
 
@@ -124,9 +123,9 @@ public class TimeLogService {
         return modelMapper.map(savedTimeLog, TimeLogResponseDTO.class);
     }
 
-    private static void calculateSummarizedHours(TimeLog lastEntry, TimeLog newTimeLog) {
+    private void calculateSummarizedHours(TimeLog lastEntry, TimeLog newTimeLog) {
         Duration duration = Duration.between(lastEntry.getDateTimeTimelog(), newTimeLog.getDateTimeTimelog());
-        double hours = duration.toMillis() / 3600000.0; // 1000ms * 60s * 60m
+        double hours = duration.toHours() / 3600000.0; // 1000ms * 60s * 60m
         double previousHours = Optional.ofNullable(lastEntry.getSummarizedHours()).orElse(0.0);
 
         newTimeLog.setSummarizedHours(previousHours + hours);

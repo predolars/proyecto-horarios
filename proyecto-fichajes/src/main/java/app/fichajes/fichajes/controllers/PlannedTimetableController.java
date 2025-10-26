@@ -30,4 +30,10 @@ public class PlannedTimetableController {
     public ResponseEntity<Object> getAll() {
         return ResponseEntity.ok(timetableService.getAll());
     }
+
+    @GetMapping("/my/{assigmentId}")
+    public ResponseEntity<Object> getMyTimetables(@PathVariable Long assigmentId) {
+        // TODO document why this method is empty
+        return null;
+    }
 }

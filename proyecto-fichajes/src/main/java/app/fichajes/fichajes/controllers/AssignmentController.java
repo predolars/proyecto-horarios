@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +26,7 @@ public class AssignmentController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('JEFE', 'ENCARGADO', 'ADMIN')")
     public ResponseEntity<Object> getAll() {
         return ResponseEntity.ok(assignmentService.getAll());
     }
@@ -33,5 +35,12 @@ public class AssignmentController {
     public ResponseEntity<Void> deleteAssignment(@PathVariable Long id) {
         assignmentService.deleteAssignment(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/my")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getMyAssignments() {
+
+        return ResponseEntity.ok(assignmentService.getMyAssignments());
     }
 }
