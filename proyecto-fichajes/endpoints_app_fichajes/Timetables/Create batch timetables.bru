@@ -7,37 +7,38 @@ meta {
 post {
   url: http://localhost:8080/api/v1/timetables
   body: json
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2MjE4MjQ3MCwiZXhwIjoxNzYyMjY4ODcwfQ.rt-wvRpq3h9WtrdrXvzHIr0asNl-r3b_4sKPX1jx5VWOIIMCC2N0hYex3TKVZQE_qokMJxHpHKnz1MYA_7ogsw
 }
 
 body:json {
   [
     {
       "assignmentId": 1,
-      "plannedDateTimeStart": "2026-11-24T16:00:00",
-      "plannedDateTimeEnd": "2026-11-24T22:00:00",
-      "createdByAssignmentId": 2
+      "plannedDateTimeStart": "2026-11-07T16:00:00",
+      "plannedDateTimeEnd": "2026-11-07T22:00:00",
+      "createdByAssignmentId": 1
     },
     {
       "assignmentId": 1,
-      "plannedDateTimeStart": "2026-11-24T20:00:00",
-      "plannedDateTimeEnd": "2026-11-24T00:00:00",
-      "createdByAssignmentId": 2
+      "plannedDateTimeStart": "2026-11-08T20:00:00",
+      "plannedDateTimeEnd": "2026-11-08T23:30:00",
+      "createdByAssignmentId": 1
+    },
+    {
+      "assignmentId": 1,
+      "plannedDateTimeStart": "2026-11-09T13:00:00",
+      "plannedDateTimeEnd": "2026-11-09T16:30:00",
+      "createdByAssignmentId": 1
+    },
+    {
+      "assignmentId": 1,
+      "plannedDateTimeStart": "2026-11-09T19:00:00",
+      "plannedDateTimeEnd": "2026-11-09T22:30:00",
+      "createdByAssignmentId": 1
     }
   ]
-  
-  // [
-  //   {
-  //     "assignmentId": 1,
-  //     "plannedDateTimeStart": "2026-11-11T09:00:00",
-  //     "plannedDateTimeEnd": "2026-11-11T17:00:00",
-  //     "createdByAssignmentId": 2
-  //   },
-  //   {
-  //     "assignmentId": 2,
-  //     "plannedDateTimeStart": "2026-11-11T10:00:00",
-  //     "plannedDateTimeEnd": "2026-11-11T18:00:00",
-  //     "createdByAssignmentId": 2
-  //   }
-  // ]
 }

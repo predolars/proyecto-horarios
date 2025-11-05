@@ -1,15 +1,24 @@
 meta {
-  name: Get timelogs
+  name: Creat request
   type: http
-  seq: 3
+  seq: 1
 }
 
-get {
-  url: http://localhost:8080/api/v1/timelogs
-  body: none
+post {
+  url: http://localhost:8080/api/v1/leave-requests
+  body: json
   auth: bearer
 }
 
 auth:bearer {
   token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc2MjE4MjQ3MCwiZXhwIjoxNzYyMjY4ODcwfQ.rt-wvRpq3h9WtrdrXvzHIr0asNl-r3b_4sKPX1jx5VWOIIMCC2N0hYex3TKVZQE_qokMJxHpHKnz1MYA_7ogsw
+}
+
+body:json {
+  {
+    "dateTimeStart": "2025-11-20T00:00:00",
+    "dateTimeEnd": "2025-11-22T23:59:59",
+    "assignmentId": 1,
+    "justifyReason": "Pido dos dias libres"
+  }
 }

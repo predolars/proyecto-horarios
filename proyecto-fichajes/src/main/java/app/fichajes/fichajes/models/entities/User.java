@@ -50,8 +50,7 @@ public class User implements UserDetails {
 
     // 1,N relationship with assignments table
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.LAZY)
-    // Transient is used to avoid the serialization of UserDetails
-    private transient List<Assignment> assignments = new ArrayList<>();
+    private List<Assignment> assignments = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

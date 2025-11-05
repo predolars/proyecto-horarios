@@ -2,6 +2,7 @@ package app.fichajes.fichajes.security;
 
 import app.fichajes.fichajes.models.dtos.request.LoginRequestDTO;
 import app.fichajes.fichajes.models.dtos.response.JwtAuthResponseDTO;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<Object> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
         log.info("Login request received");
         JwtAuthResponseDTO jwtAuthResponseDTO = authService.login(loginRequestDTO);
 

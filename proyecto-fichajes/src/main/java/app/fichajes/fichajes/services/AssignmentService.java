@@ -43,8 +43,7 @@ public class AssignmentService {
 
     @Transactional
     public AssignmentResponseDTO createAssignment(AssignmentRequestDTO dto) throws FieldDataAlreadyExistsException {
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + dto.getUserId()));
+        User user = getUser(dto);
         Company company = companyRepository.findById(dto.getCompanyId())
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found with id: " + dto.getCompanyId()));
         Role role = roleRepository.findById(dto.getRoleId())
@@ -79,8 +78,7 @@ public class AssignmentService {
     }
 
     @Transactional(readOnly = true)
-    public Object getMyAssignments() {
-
+    public List<AssignmentResponseDTO> getMyAssignments() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
@@ -90,5 +88,40 @@ public class AssignmentService {
         return assignments.stream()
                 .map(assignment -> modelMapper.map(assignment, AssignmentResponseDTO.class))
                 .toList();
+    }
+
+    @Transactional
+    public AssignmentResponseDTO updateAssignment(Long id, AssignmentRequestDTO dto) {
+        // 1. Buscar la asignación existente
+        Assignment assignmentDb = assignmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Assignment not found with id: " + id));
+
+        // 2. Cargar las nuevas entidades
+        User user = getUser(dto);
+        Company company = companyRepository.findById(dto.getCompanyId())
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found with id: " + dto.getCompanyId()));
+        Role role = roleRepository.findById(dto.getRoleId())
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found with id: " + dto.getRoleId()));
+
+        // 3. Validar duplicados (solo si la combinación ha cambiado)
+        if ((!assignmentDb.getUser().equals(user) ||
+                !assignmentDb.getCompany().equals(company) ||
+                !assignmentDb.getRole().equals(role)) && assignmentRepository.existsByUserAndCompanyAndRole(user, company, role)
+        ) {
+            throw new FieldDataAlreadyExistsException("This user is already assigned to this company with this role.");
+        }
+
+
+        // 4. Actualizar la entidad y dejar que @Transactional guarde
+        assignmentDb.setUser(user);
+        assignmentDb.setCompany(company);
+        assignmentDb.setRole(role);
+
+        return modelMapper.map(assignmentDb, AssignmentResponseDTO.class);
+    }
+
+    private User getUser(AssignmentRequestDTO dto) {
+        return userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + dto.getUserId()));
     }
 }

@@ -1,9 +1,13 @@
 package app.fichajes.fichajes.models.entities;
 
+import app.fichajes.fichajes.models.enums.LeaveRequestState;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -29,6 +33,11 @@ public class LeaveRequest {
     @Column(name = "justify_reason", nullable = false)
     @NotBlank(message = "The field cannot be null or empty")
     private String justifyReason;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "leave_request_state", nullable = false)
+    @NotNull(message = "The field cannot be null or empty")
+    private LeaveRequestState leaveRequestState = LeaveRequestState.PENDING;
 
     // N,1 relationship with assignments table
     @ManyToOne(fetch = FetchType.LAZY)

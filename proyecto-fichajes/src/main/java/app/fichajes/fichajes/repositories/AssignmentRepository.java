@@ -13,7 +13,6 @@ import java.util.List;
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     boolean existsByUserAndCompanyAndRole(User user, Company company, Role role);
 
-    Long user(User user);
-
     List<Assignment> findByUser(User user);
+
 }

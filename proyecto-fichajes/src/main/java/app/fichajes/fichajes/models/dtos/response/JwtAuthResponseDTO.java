@@ -10,8 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JwtAuthResponseDTO {
-
     private String accessToken;
     private String tokenType;
     private UserResponseDTO userResponseDTO;
+
 }

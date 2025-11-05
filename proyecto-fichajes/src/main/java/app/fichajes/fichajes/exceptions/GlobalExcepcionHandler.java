@@ -3,6 +3,7 @@ package app.fichajes.fichajes.exceptions;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,7 +35,7 @@ public class GlobalExcepcionHandler {
     public ResponseEntity<ExceptionResponseDTO> handleResourceNotFoundException(ResourceNotFoundException ex) {
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO();
 
-        exceptionResponseDTO.setStatus(HttpStatus.BAD_REQUEST.value());
+        exceptionResponseDTO.setStatus(HttpStatus.NOT_FOUND.value());
         exceptionResponseDTO.setError("Resource not found");
         exceptionResponseDTO.setMessage(ex.getMessage());
         exceptionResponseDTO.setTimestamp(LocalDateTime.now());
@@ -94,8 +95,7 @@ public class GlobalExcepcionHandler {
         ExceptionResponseDTO response = new ExceptionResponseDTO(
                 HttpStatus.CONFLICT.value(),
                 "Data Conflict",
-                ex.getMessage(),
-//                "The data provided conflicts with existing records. It is possible that the DNI, CIF or email are already in use.",
+                "The data provided conflicts with existing records. It is possible that the DNI, CIF or email are already in use. \n \n \n" + ex.getCause().getMessage(),
                 LocalDateTime.now(),
                 null
         );
@@ -130,5 +130,18 @@ public class GlobalExcepcionHandler {
         );
 
         return ResponseEntity.status(exceptionResponseDTO.getStatus()).body(exceptionResponseDTO);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionResponseDTO> handleAccessDenied(AccessDeniedException ex) {
+
+        ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO(
+                HttpStatus.FORBIDDEN.value(),
+                "FORBIDDEN",
+                ex.getMessage(),
+                LocalDateTime.now(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionResponseDTO);
     }
 }

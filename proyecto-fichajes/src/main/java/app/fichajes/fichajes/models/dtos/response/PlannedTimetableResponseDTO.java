@@ -10,4 +10,5 @@ public class PlannedTimetableResponseDTO {
     private LocalDateTime plannedDateTimeEnd;
     private AssignmentResponseDTO assignment;
     private AssignmentResponseDTO createByAssignment;
+
 }

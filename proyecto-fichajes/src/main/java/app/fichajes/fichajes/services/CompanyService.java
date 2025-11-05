@@ -104,6 +104,7 @@ public class CompanyService {
     }
 
     /** Method to return the list of assignments a company has **/
+    @Transactional(readOnly = true)
     public List<AssignmentResponseDTO> getAssignmentsByCompany(Long id) {
 
         Company company = companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Company with id %s does not exist", id)));

@@ -18,12 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity //to enable method-based security support. @PreAuthorize
 public class SecurityConfig {
 
-    final JwtAutenticationEntryPoint jwtAutenticationEntryPoint;
+    final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
-    public SecurityConfig(JwtAutenticationEntryPoint jwtAutenticationEntryPoint, JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.jwtAutenticationEntryPoint = jwtAutenticationEntryPoint;
+    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
@@ -35,12 +35,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAutenticationEntryPoint))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                // (SessionCreationPolicy.STATELESS) Necesario para definir una API stateless
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").permitAll());
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/auth/login").permitAll()
+                        .anyRequest().authenticated()
+                );
 
         http.exceptionHandling(exception -> exception
-                .authenticationEntryPoint(jwtAutenticationEntryPoint));
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

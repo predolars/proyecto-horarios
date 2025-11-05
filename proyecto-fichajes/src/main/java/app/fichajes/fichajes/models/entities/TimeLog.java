@@ -33,8 +33,8 @@ public class TimeLog {
     @Column(name = "longitude_timelog")
     private Double longitudeTimelog;
 
-    @Column(name = "summarized_hours")
-    private Double summarizedHours;
+    @Column(name = "summarized_seconds")
+    private Long summarizedSeconds;
 
     // N,1 relationship with assignments table
     @ManyToOne(fetch = FetchType.LAZY)

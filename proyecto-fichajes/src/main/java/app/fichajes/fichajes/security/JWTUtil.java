@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 @Component
@@ -56,12 +54,6 @@ public class JWTUtil {
         return (extractedUsername.equals(username) && !isTokenExpired(token));
     }
 
-    public String generateToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("role", "role");
-        return createToken(claims, username);
-    }
-
     // generate JWT token
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
@@ -77,17 +69,6 @@ public class JWTUtil {
                 .claim("roles", roles)
                 .issuedAt(new Date())
                 .expiration(expireDate)
-                .signWith(getSigningKey())
-                .compact();
-    }
-
-
-    private String createToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder()
-                .claims(claims)
-                .subject(subject)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours expiration
                 .signWith(getSigningKey())
                 .compact();
     }

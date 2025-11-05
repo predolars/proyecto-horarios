@@ -11,7 +11,8 @@ public class TimeLogResponseDTO {
     private TimeLogType timeLogType;
     private Double latitudTimelog;
     private Double longitudeTimelog;
-    private Double summarizedHours;
+    private Long summarizedSeconds;
     private AssignmentResponseDTO assignment;
     private AssignmentResponseDTO managedByAssignment;
+
 }

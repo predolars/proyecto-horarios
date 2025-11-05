@@ -7,7 +7,6 @@ import lombok.Data;
 public class TimeLogRequestDTO {
     @NotNull(message = "The assignment ID is mandatory")
     private Long assignmentId;
-    
     private Double latitude;
     private Double longitude;
 }
