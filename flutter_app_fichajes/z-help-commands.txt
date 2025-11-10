@@ -1,0 +1,4 @@
+- Actualizar json serializable: 
+    dart run build_runner watch --delete-conflicting-outputs
+
+- 
