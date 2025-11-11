@@ -14,4 +14,5 @@ class ApiConstants {
   }
 
   static const String authLogin = '/auth/login';
+  static const String assignments = '/assignments';
 }

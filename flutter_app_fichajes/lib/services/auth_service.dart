@@ -14,14 +14,14 @@ final authServiceProvider = Provider<AuthService>((riverpodProvider) {
 });
 
 class AuthService {
-  final Ref riverpodProvider;
+  final Ref _ref;
 
-  AuthService(this.riverpodProvider);
+  AuthService(this._ref);
 
   Future<bool> login(String email, String password) async {
     try {
-      final dio = riverpodProvider.read(dioProvider);
-      final storage = riverpodProvider.read(secureStorageProvider);
+      final dio = _ref.read(dioProvider);
+      final storage = _ref.read(secureStorageProvider);
 
       // 1. Preparamos la petición
       final request = LoginRequest(username: email, password: password);
@@ -35,11 +35,14 @@ class AuthService {
       // 3. Parseamos la respuesta
       final authResponse = JwtAuthResponse.fromJson(response.data);
 
+      // guardamos el toker
+      await storage.saveToken(authResponse.accessToken);
+
       // 4. Guardar Token y Usuario en DISCO (Persistencia)
       await storage.saveUser(authResponse.userResponseDTO);
 
       // 5. Actualizar el estado en MEMORIA (para que la UI reaccione)
-      riverpodProvider.read(currentUserProvider.notifier).state =
+      _ref.read(currentUserProvider.notifier).state =
           authResponse.userResponseDTO;
 
       return true;
@@ -58,9 +61,9 @@ class AuthService {
   }
 
   Future<void> logout() async {
-    final storage = riverpodProvider.read(secureStorageProvider);
+    final storage = _ref.read(secureStorageProvider);
     await storage.clearAll(); // Borra token y usuario del disco
-    riverpodProvider.read(currentUserProvider.notifier).state =
+    _ref.read(currentUserProvider.notifier).state =
         null; // Borra usuario de la memoria
   }
 }
